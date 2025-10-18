@@ -1,0 +1,291 @@
+body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #8b5e3c;
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative; /* Pour positionner le bouton de thème */
+    }
+    section {
+      padding: 20px;
+      margin: 20px;
+      background-color: #fff8f0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s, border 0.3s;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px 0;
+    }
+    .weather-icon {
+      width: 50px;
+      vertical-align: middle;
+      height: 50px;
+    }
+    #theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: 1px solid; /* La couleur s'adaptera au thème */
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      color: inherit; /* Hérite la couleur du texte du parent */
+    }
+    #theme-toggle:hover {
+      transform: scale(1.1);
+    }
+    /* --- Thème Nuit --- */
+    .theme-nuit {
+      background-image: url('asset/background.jpg'); 
+      background-size: cover;
+      background-attachment: fixed;
+      background-color: #121212;
+      
+       
+      /* Fond sombre */
+      color: #e0e0e0; /* Texte clair */
+    }
+    .theme-nuit header, .theme-nuit section {
+      background-color: #1e1e1e; /* Cartes un peu plus claires */
+      border: 1px solid #333;
+    }
+    .theme-nuit nav a {
+      color: #bb86fc; /* Couleur d'accentuation pour les liens */
+    }
+    .theme-nuit nav a:hover {
+      color: #745757a5;
+    }
+    .theme-nuit li {
+      border-bottom: 1px solid #333;
+    }
+    /* --- Thème Jour "Dunes du Sahara" --- */
+    .theme-jour {
+      background-image: url('asset/background.jpg'); 
+      background-size: cover;
+      background-attachment: fixed;
+      
+      color: #6b4f4b; /* Brun foncé pour le texte */
+    }
+    .theme-jour header {
+      background-color: #e7c993d1; /* Orange terre cuite pour l'en-tête */
+      color: #2a1b02;
+      border: 1px solid #c36c51;
+    }
+    .theme-jour section {
+      background-color: #f6dfb2; /* Sable très clair pour les sections */
+      border: 1px solid #f8b045; /* Bordure couleur tan */
+    }
+    .theme-jour nav a {
+      color: #131210; /* Liens blancs dans l'en-tête */
+    }
+    .theme-jour nav a:hover {
+      color: #06ef22; /* Liens couleur sable au survol */
+    }
+    .theme-jour li {
+      border-bottom: 1px solid #e0c9a6; /* Séparateur couleur tan */
+    }
+
+/* --- Styles pour la section Cuisine --- */
+.cuisine-container {
+  display: flex; /* Affiche les cartes en ligne */
+  overflow-x: auto; /* Permet le défilement horizontal */
+  gap: 20px; /* Espace entre les cartes */
+  padding: 10px 0; /* Ajoute un peu d'espace vertical */
+  /* Masque la barre de défilement pour un look plus propre */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Masque la barre de défilement pour Chrome, Safari et Opera */
+.cuisine-container::-webkit-scrollbar {
+  display: none;
+}
+
+.cuisine-card {
+  flex: 0 0 220px; /* Empêche les cartes de rétrécir, largeur fixe */
+  border-radius: 10px;
+  overflow: hidden; /* Assure que l'image ne dépasse pas les coins arrondis */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+  background-color: inherit; /* Hérite la couleur de la section parente */
+}
+
+.cuisine-card:hover {
+  transform: translateY(-5px); /* Effet de survol */
+  cursor: pointer; /* Indique que la carte est cliquable */
+}
+
+.cuisine-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; /* Assure que l'image remplit l'espace sans se déformer */
+}
+
+.cuisine-card h3 {
+  margin: 15px 0 10px 0;
+  font-size: 1.2em;
+}
+
+.cuisine-card p {
+  padding: 0 15px 15px 15px;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+/* Ajustements de couleur pour les cartes selon le thème */
+.theme-nuit .cuisine-card {
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+}
+
+.theme-jour .cuisine-card {
+  background-color: #fffaf2;
+  border: 1px solid #e0c9a6;
+}
+
+/* --- Styles pour la fenêtre modale --- */
+.modal {
+  display: none; /* Cachée par défaut */
+  position: fixed; /* Reste en place au défilement */
+  z-index: 1000; /* Se place au-dessus de tout */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Permet de faire défiler si le contenu est trop grand */
+  background-color: rgba(0,0,0,0.7); /* Fond noir semi-transparent */
+  animation: fadeIn 0.3s;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto; /* Centrée verticalement et horizontalement */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+  animation: slideIn 0.4s;
+}
+
+/* Ajustement des couleurs de la modale selon le thème */
+.theme-nuit .modal-content {
+  background-color: #2c2c2c;
+  border-color: #555;
+}
+.theme-jour .modal-content {
+  background-color: #fffaf2;
+  border-color: #e0c9a6;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #ff0000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modal-img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from {transform: translateY(-50px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+
+/* --- Styles pour la carte Leaflet --- */
+#map {
+  height: 400px; /* Hauteur obligatoire pour que la carte s'affiche */
+  width: 100%;
+  border-radius: 8px;
+  z-index: 0; /* Assure que la carte reste en arrière-plan des modales */
+}
+
+#locate-btn {
+    font-size: 0.8em;
+    background: none;
+    border: 1px solid; /* La couleur s'adaptera au thème */
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 2px 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+    color: inherit; /* Hérite la couleur du titre */
+    transition: background-color 0.2s;
+}
+
+#locate-btn:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #636160;
+      color: white;
+      margin-top: 20px;
+    }
+
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icons a {
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  margin: 0 10px;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #fdf0e0; /* Couleur sable clair au survol */
+}

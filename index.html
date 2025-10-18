@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Niamey, cœur du Sahel</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="index.css">
+ 
+</head>
+<!-- Leaflet JS (doit être avant votre script index.js) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="index.js" defer></script>
+<body class="theme-nuit">
+
+<header>
+    <div>
+    <img src="asset/niger.gif" alt="Drapeau du Niger avec bandes horizontales orange, blanche et verte et un disque orange centré sur la bande blanche; petit drapeau décoratif en haut de la page évoquant identité et fierté nationales; pas de texte visible" width="150">
+    </div>
+  <h1>Niamey, cœur du Sahel</h1>
+  <button id="theme-toggle" title="Changer le thème">🌓</button>
+  <p>Entre dunes, fleuve et traditions, découvrez l’âme du Niger</p>
+  <div><nav>
+    <a href="#weather">Météo</a> |
+    <a href="#country-info">Infos Pays</a> |
+    <a href="#map-section">Carte</a> |
+    <a href="#cuisine">Cuisine locale</a>
+  </nav></div>
+</header>
+
+<section id="weather">
+  <h2>🌤️ Météo à Niamey</h2>
+  <p><strong>Température :</strong> <span id="temp">...</span> °C</p>
+  <p><strong>Conditions :</strong> <span id="desc">...</span> <img id="icon" class="weather-icon" src="" alt=""></p>
+</section>
+
+<section id="country-info">
+  <h2>Le Niger en bref</h2>
+  <ul>
+    <li><strong>Population :</strong> <span id="population">...</span> habitants</li>
+    <li><strong>Capitale :</strong> <span id="capital">...</span></li>
+    <li><strong>Monnaie :</strong> <span id="currency">...</span></li>
+    <li><strong>Langue officielle :</strong> <span id="language">...</span></li>
+  </ul>
+</section>
+
+<section id="map-section">
+  <h2>📍 Explorez Niamey <button id="locate-btn" title="Me localiser"><i class="fa-solid fa-location-crosshairs"></i></button></h2>
+  <div id="map"></div>
+</section>
+
+<section id="cuisine">
+  <h2>🍽️ Saveurs de Niamey</h2>
+  <div class="cuisine-container">
+    <div class="cuisine-card">
+      <h3>Dambou</h3>
+      <img src="asset/Dambou.jpg" alt="Plat de Dambou" >
+      <p>Couscous de mil mélangé à des légumes, souvent accompagné de viande grillée.</p>
+    </div>
+    <div class="cuisine-card">
+      <h3>Tuwo</h3>
+      <img src="asset/tuwo.jpg" alt="Plat de Tuwo">
+      <p>Bouillie épaisse de mil ou de maïs, servie avec des sauces riches en arachide, en légumes ou sauce"noire"(sauce à base de feuille de baobab ou autres).Ce plat traditionel est vieux de plusieurs siècles.</p>
+    </div>
+    <div class="cuisine-card">
+      <h3>Fari massa</h3>
+      <img src="asset/fariMassa.jpg" alt="Beignets de Fari massa">
+      <p>Beignets de blé fermenté, croustillants à l’extérieur, moelleux à l’intérieur.Il est souvent accompagné d'une sauce de poulet</p>
+    </div>
+    <div class="cuisine-card">
+      <h3>Kilishi</h3>
+      <img src="asset/kilishi.png" alt="Viande séchée Kilishi">
+      <p>Viande séchée épicée, véritable snack emblématique du Sahel.</p>
+    </div>
+    <div class="cuisine-card">
+      <h3>viande grillée</h3>
+      <img src="asset/viande_grillée.jpg" alt="Plat de viande grillée">
+      <p>Viande de mouton grillée selon un savoir faire nigérien.Appelé localement "Datsé", ce met est l'un des plats les plus prisés au Niger.</p>
+    </div>
+  </div>
+ 
+</section>
+
+<!-- Fenêtre modale pour la cuisine -->
+<div id="cuisine-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <img id="modal-img" src="" alt="Plat de cuisine nigérienne en gros plan">
+    <h3 id="modal-title"></h3>
+    <p id="modal-desc"></p>
+  </div>
+</div>
+<div>
+  <footer class="footer">
+    <p>&copy; 2025 Niamey, cœur du Sahel. Tous droits réservés.</p>
+    <p>Conçu par [Moun Digital]</p>
+    <div class="social-icons">
+      <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+    <div>
+      lien utile :
+      <a href="http://www.tourisme.gouv.ne/" target="_blank">Office du Tourisme du Niger</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
