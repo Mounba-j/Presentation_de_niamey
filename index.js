@@ -39,104 +39,124 @@ fetch('https://restcountries.com/v3.1/name/Niger')
 
 // Gestion du thème
 document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+  const themeToggle = document.getElementById("theme-toggle");
+  const body = document.body;
 
-    themeToggle.addEventListener('click', () => {
-        // Bascule entre les classes de thème sur le body
-        body.classList.toggle('theme-jour');
-        body.classList.toggle('theme-nuit');
+  // Vérifie si un thème est déjà stocké
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    // Applique le thème sauvegardé
+    body.className = savedTheme;
+    // Met à jour l'icône du bouton
+    updateThemeIcon(savedTheme === "theme-jour");
+  }
 
-        // Met à jour l'icône du bouton en fonction du thème actif
-        if (body.classList.contains('theme-jour')) {
-            themeToggle.textContent = '☀️'; // Icône pour le thème jour
-            themeToggle.title = 'Passer au thème nuit';
-        } else {
-            themeToggle.textContent = '🌓'; // Icône pour le thème nuit
-            themeToggle.title = 'Passer au thème jour';
-        }
+  themeToggle.addEventListener("click", () => {
+    // Bascule entre les classes de thème sur le body
+    const isLightTheme = body.classList.toggle("theme-jour");
+    body.classList.toggle("theme-nuit");
+
+    // Sauvegarde le nouveau thème dans le localStorage
+    localStorage.setItem("theme", isLightTheme ? "theme-jour" : "theme-nuit");
+
+    // Met à jour l'icône du bouton
+    updateThemeIcon(isLightTheme);
+  });
+
+  // Fonction pour mettre à jour l'icône du bouton
+  function updateThemeIcon(isLightTheme) {
+    if (isLightTheme) {
+      themeToggle.textContent = "☀️";
+      themeToggle.title = "Passer au thème nuit";
+    } else {
+      themeToggle.textContent = "🌓";
+      themeToggle.title = "Passer au thème jour";
+    }
+  }
+
+  // --- Initialisation de la carte Leaflet ---
+  // Coordonnées de Niamey: [latitude, longitude]
+  const mapCoords = [13.5137, 2.1098];
+  // Initialise la carte et la centre sur les coordonnées avec un niveau de zoom
+  const map = L.map("map").setView(mapCoords, 12);
+
+  // Ajoute le fond de carte OpenStreetMap
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  // Ajoute un marqueur sur Niamey avec une popup
+  L.marker(mapCoords)
+    .addTo(map)
+    .bindPopup("<b>Niamey</b><br>Capitale du Niger.")
+    .openPopup();
+
+  // --- Fonctionnalité de géolocalisation ---
+  const locateBtn = document.getElementById("locate-btn");
+  let userMarker, accuracyCircle;
+
+  locateBtn.addEventListener("click", () => {
+    map.locate({ setView: true, maxZoom: 16 });
+  });
+
+  map.on("locationfound", (e) => {
+    const radius = e.accuracy;
+
+    // Supprime les anciens marqueurs/cercles s'ils existent
+    if (userMarker) {
+      map.removeLayer(userMarker);
+      map.removeLayer(accuracyCircle);
+    }
+
+    // Ajoute un marqueur pour la position de l'utilisateur
+    userMarker = L.marker(e.latlng)
+      .addTo(map)
+      .bindPopup(`Vous êtes à environ ${Math.round(radius)} mètres d'ici.`)
+      .openPopup();
+
+    // Ajoute un cercle pour montrer la précision
+    accuracyCircle = L.circle(e.latlng, radius).addTo(map);
+  });
+
+  map.on("locationerror", (e) => {
+    alert(e.message);
+  });
+
+  // --- Gestion de la modale pour la cuisine ---
+  const modal = document.getElementById("cuisine-modal");
+  const modalImg = document.getElementById("modal-img");
+  const modalTitle = document.getElementById("modal-title");
+  const modalDesc = document.getElementById("modal-desc");
+  const closeModal = document.querySelector(".close-button");
+
+  document.querySelectorAll(".cuisine-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      // Récupère les infos de la carte cliquée
+      const title = card.querySelector("h3").textContent;
+      const imgSrc = card.querySelector("img").src;
+      const desc = card.querySelector("p").textContent;
+
+      // Remplit la modale avec les infos
+      modalTitle.textContent = title;
+      modalImg.src = imgSrc;
+      modalDesc.textContent = desc;
+
+      // Affiche la modale
+      modal.style.display = "block";
     });
+  });
 
-    // --- Initialisation de la carte Leaflet ---
-    // Coordonnées de Niamey: [latitude, longitude]
-    const mapCoords = [13.5137, 2.1098]; 
-    // Initialise la carte et la centre sur les coordonnées avec un niveau de zoom
-    const map = L.map('map').setView(mapCoords, 12);
+  // Ferme la modale en cliquant sur le bouton (X)
+  closeModal.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
 
-    // Ajoute le fond de carte OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Ajoute un marqueur sur Niamey avec une popup
-    L.marker(mapCoords).addTo(map)
-        .bindPopup('<b>Niamey</b><br>Capitale du Niger.')
-        .openPopup();
-
-    // --- Fonctionnalité de géolocalisation ---
-    const locateBtn = document.getElementById('locate-btn');
-    let userMarker, accuracyCircle;
-
-    locateBtn.addEventListener('click', () => {
-        map.locate({setView: true, maxZoom: 16});
-    });
-
-    map.on('locationfound', (e) => {
-        const radius = e.accuracy;
-
-        // Supprime les anciens marqueurs/cercles s'ils existent
-        if (userMarker) {
-            map.removeLayer(userMarker);
-            map.removeLayer(accuracyCircle);
-        }
-
-        // Ajoute un marqueur pour la position de l'utilisateur
-        userMarker = L.marker(e.latlng).addTo(map)
-            .bindPopup(`Vous êtes à environ ${Math.round(radius)} mètres d'ici.`).openPopup();
-
-        // Ajoute un cercle pour montrer la précision
-        accuracyCircle = L.circle(e.latlng, radius).addTo(map);
-    });
-
-    map.on('locationerror', (e) => {
-        alert(e.message);
-    });
-
-
-    // --- Gestion de la modale pour la cuisine ---
-    const modal = document.getElementById('cuisine-modal');
-    const modalImg = document.getElementById('modal-img');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
-    const closeModal = document.querySelector('.close-button');
-
-    document.querySelectorAll('.cuisine-card').forEach(card => {
-        card.addEventListener('click', () => {
-            // Récupère les infos de la carte cliquée
-            const title = card.querySelector('h3').textContent;
-            const imgSrc = card.querySelector('img').src;
-            const desc = card.querySelector('p').textContent;
-
-            // Remplit la modale avec les infos
-            modalTitle.textContent = title;
-            modalImg.src = imgSrc;
-            modalDesc.textContent = desc;
-
-            // Affiche la modale
-            modal.style.display = 'block';
-        });
-    });
-
-    // Ferme la modale en cliquant sur le bouton (X)
-    closeModal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    // Ferme la modale en cliquant en dehors du contenu
-    window.addEventListener('click', (event) => {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    });
+  // Ferme la modale en cliquant en dehors du contenu
+  window.addEventListener("click", (event) => {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
 });
 
